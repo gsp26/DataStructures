@@ -71,54 +71,81 @@ void printList(struct Node * root)
 }
 struct Node * remDup(struct Node * root)
 {
-    if(root == NULL && root->next == NULL)
+    if(root == NULL)
         return root;
 
+    int x = root->data;
+    struct Node *temp ;
+    temp = root->next;
     struct Node * prev = root;
-    struct Node * start = NULL;
-    struct Node * temp = root->next;
-    int x = prev->data;
+    struct Node * t1 = NULL;
     while(temp != NULL)
     {
         if(x == temp->data)
         {
-            struct Node * t1 = temp->next;
-            delete temp;
-            if(prev == start)
-                start = NULL;
-            delete prev;
-            if(start)
-                start->next = NULL;
-            prev = NULL;
-            temp = t1;
+            t1 = temp;
+            prev->next = temp->next;
+            temp = temp->next;
+            delete t1;
         }
         else
         {
-            if(start == NULL && prev != NULL)
-            {
-                start = prev;
-            }
-            else if( prev == NULL && start == NULL)
-            {
-                start = temp;
-            }
-            else if(start->next == NULL)
-                start->next = temp;
-            else
-            {
-                struct Node * n1 = start->next;
-
-                while(n1->next != NULL)
-                    n1 = n1->next;
-
-                n1->next = temp;
-            }
             prev = temp;
             x = temp->data;
             temp = temp->next;
         }
     }
-    return start;
+    return root;
+
+}
+
+struct Node * remAllDups(struct Node * root)
+{
+    if(root == NULL)
+        return root;
+
+    int x = root->data;
+    struct Node * temp = root->next;
+    struct Node * newRoot = NULL;
+    struct Node * prev, *t1 *lu;
+    prev = root;
+    while(temp != NULL)
+    {
+        if(x == temp->data)
+        {
+            if(newRoot == NULL || newRoot == temp || newRoot->data == temp->data)
+            {
+                newRoot = temp->next;
+                delete prev;
+                prev = NULL;
+            }
+            t1 = temp->next;
+            delete temp;
+            delete prev;
+            temp = t1;
+            if(lu != NULL)
+                lu->next = temp;
+        }
+        else
+        {
+            if(prev == NULL)
+            {
+                x = temp->data;
+                prev = temp;
+                temp = temp->next;
+            }
+            else
+            {
+                x = temp->data;
+                lu = prev;
+                prev->next = temp;
+                prev = temp;
+                temp = temp->next;
+            }
+        }
+    }
+    return newRoot;
+
 }
             
 
