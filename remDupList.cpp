@@ -104,50 +104,59 @@ struct Node * remAllDups(struct Node * root)
     if(root == NULL)
         return root;
 
-    int x = root->data;
-    struct Node * temp = root->next;
-    struct Node * newRoot = NULL;
-    struct Node * prev, *t1 *lu;
-    prev = root;
+    struct Node * prev = NULL;
+    struct Node *t1 = NULL;
+    struct Node *t2 = NULL;
+    struct Node *lu = NULL;
+    struct Node *newRoot = NULL;;
+    struct Node *temp = root;;
+    if(temp->next == NULL)
+        return temp;
     while(temp != NULL)
     {
-        if(x == temp->data)
+        if(temp->next != NULL)
         {
-            if(newRoot == NULL || newRoot == temp || newRoot->data == temp->data)
+            if(temp->data == temp->next->data)
             {
-                newRoot = temp->next;
-                delete prev;
-                prev = NULL;
-            }
-            t1 = temp->next;
-            delete temp;
-            delete prev;
-            temp = t1;
-            if(lu != NULL)
-                lu->next = temp;
-        }
-        else
-        {
-            if(prev == NULL)
-            {
-                x = temp->data;
-                prev = temp;
-                temp = temp->next;
+                t1 = temp->next->next;
+                int x = temp->data;
+                delete temp->next;
+                delete temp;
+                while(t1 != NULL)
+                {
+                    if(t1->data == x)
+                    {
+                        t2 = t1->next;
+                        delete t1;
+                        t1 = t2;
+                    }
+                    else
+                        break;
+                }
+                temp = t1;
             }
             else
             {
-                x = temp->data;
-                lu = prev;
-                prev->next = temp;
-                prev = temp;
+                if(newRoot == NULL)
+                {
+                    newRoot = temp;
+                    //newRoot->next = temp->next;
+                }
+                if(lu != NULL)
+                    lu->next = temp;
+                lu = temp;
                 temp = temp->next;
             }
         }
+        else
+            break;
     }
+    if(lu != NULL)
+        lu->next = NULL;
     return newRoot;
 
 }
-            
+
 
 
 
@@ -155,29 +164,20 @@ int main()
 {
     cout << "Linked list in sorted order with duplicates>>>>>>" <<endl;
     struct Node * root = NULL;
+    root = insert(root,2);
+    root = insert(root,3);
+    root = insert(root,8);
+    root = insert(root,8);
     root = insert(root,10);
-    root = insert(root,40);
-    root = insert(root,10);
-    root = insert(root,20);
-    root = insert(root,20);
-    root = insert(root,20);
-    root = insert(root,40);
-    root = insert(root,40);
-    root = insert(root,45);
-    root = insert(root,45);
-    root = insert(root,20);
-    root = insert(root,30);
-    root = insert(root,50);
-    root = insert(root,47);
-    root = insert(root,47);
-    root = insert(root,47);
-    root = insert(root,47);
-    root = insert(root,55);
-    root = insert(root,55);
-    root = insert(root,55);
+    root = insert(root,11);
+    root = insert(root,11);
+    root = insert(root,12);
+    root = insert(root,15);
+    root = insert(root,18);
+    root = insert(root,19);
 
     printList(root);
-    root = remDup(root);
+    root = remAllDups(root);
     cout << "After Removing Dups >>  " << endl;
     printList(root);
 
